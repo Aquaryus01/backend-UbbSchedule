@@ -1,13 +1,12 @@
 from flask import Flask, request
 from flask_cors import CORS, cross_origin
-import json
-from scrapTable import ScrapTable
+from Configuration import Configuration
+from Controller.scheduleController import ScheduleController
 app = Flask(__name__)
 cors = CORS(app)
-app.config['TESTING'] = True
 app.config['CORS_HEADERS'] = 'Content-Type'
 
-@app.route('/', methods=['GET'])
+@app.route('/schedule', methods=['GET'])
 @cross_origin()
 def getTable():
 
@@ -16,18 +15,13 @@ def getTable():
         semester = request.args.get('semester')
         year = request.args.get('year')
         day = request.args.get('day')
-        link = 'http://www.cs.ubbcluj.ro/files/orar/'+ year + '-' + semester + '/tabelar/'
+        
+        conf = Configuration()
+        conf.completeWebUrl(year,semester, group)
+        link = conf.getWebUrl()
 
-        if day != None:
-            scrapTable = ScrapTable(link, group, semigroup, day)
-            app_json = json.dumps(scrapTable.getTable())
-            return app_json
-        else:
-            scrapTable = ScrapTable(link, group, semigroup)
-            app_json = json.dumps(scrapTable.getTable())
-            return app_json
+        scCon = ScheduleController(group,semester,year,link,semigroup)
+        return scCon.getSmartSchedule()
 
-
-# main driver function
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
