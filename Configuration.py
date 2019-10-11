@@ -1,6 +1,7 @@
 class Configuration:
     def __init__(self):
         self.__webUrl = 'http://www.cs.ubbcluj.ro/files/orar/'
+        self.__webUrlRoom = 'http://www.cs.ubbcluj.ro/files/orar/'
 
     def __matchGroup(self, title):
         if title[0]=="2":
@@ -23,9 +24,12 @@ class Configuration:
             return str("IG" + title[1])
     
     def getWebUrl(self):
-        print(self.__webUrl)
         return self.__webUrl
+
+    def getWebUrlRoom(self):
+        return self.__webUrlRoom
 
     def completeWebUrl(self, year, semester, group):
         self.__webUrl = self.__webUrl + year + '-' + semester + '/tabelar/' + self.__matchGroup(group)+".html"
-        print(self.__webUrl)
+        self.__webUrlRoom = self.__webUrlRoom + year + '-' + semester + '/sali/legenda.html'
+        

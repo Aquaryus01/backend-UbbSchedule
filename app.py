@@ -18,10 +18,12 @@ def getTable():
         
         conf = Configuration()
         conf.completeWebUrl(year,semester, group)
+        
         link = conf.getWebUrl()
+        linkRoom = conf.getWebUrlRoom()
 
-        scCon = ScheduleController(group,semester,year,link,semigroup)
+        scCon = ScheduleController(group,semester,year,link,linkRoom,semigroup)
         return scCon.getSmartSchedule()
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0')
+    app.run(host='0.0.0.0', debug=True)

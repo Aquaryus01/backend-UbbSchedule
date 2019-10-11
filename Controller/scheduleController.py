@@ -5,12 +5,34 @@ from Classes.schedule import Schedule
 import json
 
 class ScheduleController:
-    def __init__(self,group,semester,year,link,semigroup=None,day=None):
+    def __init__(self,group,semester,year,link,linkRoom=None,semigroup=None,day=None):
         self.group = group
         self.semester = semester
         self.year = year
         self.link = link 
         self.semigroup = semigroup
+        self.linkRoom = linkRoom
+
+    def getSmartSchedule(self):
+        schedule = Schedule(self.link, self.group, self.semigroup, self.linkRoom)
+        data = schedule.getSmartSchedule()
+        roomsData = schedule.getRooms()
+
+        data = self.__sortScheduleByFormation(data)
+        data = self.__sortScheduleByWeek(data)
+        data = self.__atachLegend(roomsData, data)
+        data = self.__sortScheduleByDays(data)
+        
+
+        app_json = json.dumps(data)
+        return app_json
+
+    def __atachLegend(self, roomsData, data):
+        for roomNameSchedule in data:
+            for roomName in roomsData:
+                if roomName["room"] == roomNameSchedule["room"]:
+                    roomNameSchedule["adress"] = roomName["adress"]
+        return data
 
     def __sortScheduleByDays(self, infos):
         data = dict()
@@ -42,17 +64,6 @@ class ScheduleController:
 
         return dataAll
 
-    def getSmartSchedule(self):
-        schedule = Schedule(self.link, self.group, self.semigroup)
-        data = schedule.getSmartSchedule()
-
-        data = self.__sortScheduleByFormation(data)
-        data = self.__sortScheduleByWeek(data)
-        data = self.__sortScheduleByDays(data)
-
-        app_json = json.dumps(data)
-        return app_json
-
     def __getWeekNumber(self):
         dateFinal = date.today()
         dateStart = date(2019, 9, 30)
@@ -65,8 +76,4 @@ class ScheduleController:
     def __changeSemi(self, nr):
         if nr == "1":
             return "2"
-        return "1"
-    
-
-
-    
+        return "1"    
