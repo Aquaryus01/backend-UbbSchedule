@@ -9,7 +9,7 @@ class ScheduleController:
         self.group = group
         self.semester = semester
         self.year = year
-        self.link = link 
+        self.link = link
         self.semigroup = semigroup
         self.linkRoom = linkRoom
 
@@ -22,7 +22,7 @@ class ScheduleController:
         data = self.__sortScheduleByWeek(data)
         data = self.__atachLegend(roomsData, data)
         data = self.__sortScheduleByDays(data)
-        
+
 
         app_json = json.dumps(data)
         return app_json
@@ -65,15 +65,22 @@ class ScheduleController:
         return dataAll
 
     def __getWeekNumber(self):
+        #true  = saptamana para
+        #false = saptamana impara
         dateFinal = date.today()
         dateStart = date(2019, 9, 30)
         nrDays = ((dateFinal - dateStart).days)
+        dateNowName = date.today().strftime("%A")
         if nrDays // 7 % 2 == 0:
+            if dateNowName=="Saturday" or dateNowName=="Sunday":
+                return False
             return True
         else:
+            if dateNowName=="Saturday" or dateNowName=="Sunday":
+                return True
             return False
 
     def __changeSemi(self, nr):
         if nr == "1":
             return "2"
-        return "1"    
+        return "1"
