@@ -21,11 +21,19 @@ class ScheduleController:
         data = self.__sortScheduleByFormation(data)
         data = self.__sortScheduleByWeek(data)
         data = self.__atachLegend(roomsData, data)
+        data = self.__activateDiscipline(data)
         data = self.__sortScheduleByDays(data)
 
 
         app_json = json.dumps(data)
         return app_json
+
+    def __activateDiscipline(self, data):
+        dataAll = []
+        for element in data:
+            element["isActive"] =  True
+            dataAll.append(element)
+        return dataAll
 
     def __atachLegend(self, roomsData, data):
         for roomNameSchedule in data:
