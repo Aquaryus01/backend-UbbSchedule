@@ -12,7 +12,7 @@ class Schedule:
 
     def getRooms(self):
         source = urllib.request.urlopen(self.linkRoom).read()
-        soup = bs.BeautifulSoup(source, 'lxml')
+        soup = bs.BeautifulSoup(source, 'html.parser')
 
         table = soup.find_all('table')[0]
         final = []
@@ -31,8 +31,8 @@ class Schedule:
 
     def getSmartSchedule(self):
         source = urllib.request.urlopen(self.source).read()
-        soup = bs.BeautifulSoup(source, 'lxml')
-
+        soup = bs.BeautifulSoup(source, 'html.parser')
+        
         index = int(self.group[2]) - 1
         table = soup.find_all('table')[index]
 

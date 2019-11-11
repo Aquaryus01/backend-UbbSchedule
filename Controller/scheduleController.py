@@ -13,6 +13,20 @@ class ScheduleController:
         self.semigroup = semigroup
         self.linkRoom = linkRoom
 
+
+    def getScheduleNoWeek(self):
+        schedule = Schedule(self.link, self.group, self.semigroup, self.linkRoom)
+        data = schedule.getSmartSchedule()
+        roomsData = schedule.getRooms()
+
+        data = self.__sortScheduleByFormation(data)
+        data = self.__atachLegend(roomsData, data)
+        data = self.__activateDiscipline(data)
+        data = self.__sortScheduleByDays(data)
+
+        app_json = json.dumps(data)
+        return app_json
+
     def getSmartSchedule(self):
         schedule = Schedule(self.link, self.group, self.semigroup, self.linkRoom)
         data = schedule.getSmartSchedule()
